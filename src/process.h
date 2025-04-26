@@ -48,5 +48,7 @@ private:
     int lineAngle;
     int orientation;
     int* ballPos;
+    elapsedMillis kickWait;
+    int kickWaitTime;
 };
 #endif

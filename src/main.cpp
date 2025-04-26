@@ -4,7 +4,7 @@
 double motorPower;
 //1 = Offense
 //0 = Defense
-int robot = 0;
+int robot = 1;
 Process process(robot);
 CompassSensor compassSensor;
 // Motor motor(0);

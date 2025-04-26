@@ -2,7 +2,7 @@
 
 Process::Process(int physicalRobot):roleSwitch(physicalRobot), motor(physicalRobot), orbit(physicalRobot)
 {
-
+    kickWaitTime = 250;
 }
 
 void Process::general(int role)
@@ -39,30 +39,38 @@ void Process::offense(double motorPower)
     general(1);
     // motorPower = motor.speedControl(cam.ballDistance,motorPower, 1);
     double offenseOrientation=0;
-    if (lineDetection.linepresent && (lineDetection.Chord() > 0.2 || motorPower > 0.2))
-    {
-        motor.Move(lineAngle, 0.2, motor.initialOrientation);
-    }
-    else
-    {
-        if (cam.ball == -5)
-            smoothMove(-1, lineAngle, 0.5, motor.initialOrientation);
+    if(kickWait >= kickWaitTime) {
+        if ((lineDetection.linepresent && (lineDetection.Chord() > 0.1 || motorPower > 0.2)))
+        {
+            motor.Move(lineAngle, 0.5, getOrientationOffense(orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime)));
+            // lineHold = 0;
+        }
         else
         {
-            // if(esc.needTakeBack(getAwayGoal(),cam.ball, motor.orientationVal)){
-            //     Serial.println("takeback: ");
-            //     smoothMove(esc.takeBack(cam.ball,getAwayGoal(),orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime),motor.orientationVal, motor), lineAngle, 0.1, motor.initialOrientation);
-            // }
-            // else{
-                double moveAngle = orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime);
-                offenseOrientation = getOrientationOffense(moveAngle);
-                smoothMove(moveAngle, lineAngle, motorPower, offenseOrientation);
-                // motor.Move(orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime), motorPower, motor.initialOrientation);
+            if (cam.ball == -5)
+                smoothMove(-1, lineAngle, 0.5, motor.initialOrientation);
+            else
+            {
+                // if(esc.needTakeBack(getAwayGoal(),cam.ball, motor.orientationVal)){
+                //     Serial.println("takeback: ");
+                //     smoothMove(esc.takeBack(cam.ball,getAwayGoal(),orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime),motor.orientationVal, motor), lineAngle, 0.1, motor.initialOrientation);
+                // }
+                // else{
+                    double moveAngle = orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime);
+                    offenseOrientation = getOrientationOffense(moveAngle);
+                    smoothMove(moveAngle, lineAngle, motorPower, offenseOrientation);
+                    // motor.Move(orbit.CalculateRobotAngle(cam.ball, cam.ballDistance, cam.derivative, cam.sampleTime), motorPower, motor.initialOrientation);
 
-            // }
+                // }
+            }
         }
+    } else {
+        motor.Stop();
     }
-    goal.kickAllowed(localization.getRobotY(), motor.orientationVal- offenseOrientation, getAwayGoal());
+    if(goal.kickAllowed(localization.getRobotY(), motor.orientationVal- offenseOrientation, getAwayGoal())) {
+        motor.Stop();
+        kickWait = 0;
+    }
 }
 
 void Process::defense(double motorPower)

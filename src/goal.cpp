@@ -95,10 +95,12 @@ void Goal::kickBackground()
         digitalWrite(kickerPin, LOW);
     }
 }
-void Goal::kickAllowed(int y, int correction, int goalAngle)
+bool Goal::kickAllowed(int y, int correction, int goalAngle)
 {
     if (switches.lightgate() && ((goalAngle > 350 && goalAngle < 360) || (goalAngle < 10 && goalAngle > 0)))
     {
         kick();
+        return true;
     }
+    return false;
 }
