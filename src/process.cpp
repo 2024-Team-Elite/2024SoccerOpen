@@ -14,11 +14,11 @@ void Process::general(int role)
     cam.CamCalc();
     motor.FindCorrection(motor.getOrientation(), motor.initialOrientation);
     if(role == 1){
-        localization.offenseLocalization(motor.orientationVal, getAwayGoal(), getHomeGoal());
+        // localization.offenseLocalization(motor.orientationVal, getAwayGoal(), getHomeGoal());
         motor.myPID.SetTunings(0.28, 0, 0.00005);
     }
     else{
-        localization.defenseLocalization(motor.orientationVal,getAwayGoal(),getHomeGoal());
+        // localization.defenseLocalization(motor.orientationVal,getAwayGoal(),getHomeGoal());
         motor.myPID.SetTunings(0.22,0,0);
     }
     // bluetooth.readData();
@@ -143,5 +143,5 @@ int Process::getOrientationOffense(double moveAngle)
     // if (cam.ballDistance < 60 && (ballCheck < 70 || ballCheck > 290))
     //     return goal.scoreOrientation(orientation, getAwayGoal(), motor.initialOrientation);
     else
-        return goal.scoreOrientation(orientation, getAwayGoal(), motor.correction);
+        return goal.scoreOrientation(orientation, getAwayGoal(), motor.initialOrientation);
 }

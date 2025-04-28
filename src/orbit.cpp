@@ -52,7 +52,7 @@ double Orbit::CalculateRobotAngle(double ballAngle, double distance, double deri
         orbitValue = min(90, 16 * exp(0.033 * newballAngle));
     }
     else{ //voltmeter
-        orbitValue = min(90, 8 * exp(0.033 * newballAngle));
+        orbitValue = min(90, 16 * exp(0.033 * newballAngle));
     }
     double outputSum = orbitValue * dampenVal;
     if (derivative > 3)

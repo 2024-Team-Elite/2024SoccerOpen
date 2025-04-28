@@ -4,7 +4,7 @@
 double motorPower;
 //1 = Offense
 //0 = Defense
-int robot = 1;
+int robot = 0;
 Process process(robot);
 CompassSensor compassSensor;
 // Motor motor(0);
@@ -34,13 +34,14 @@ void loop()
   // Serial.println(digitalRead(5));
   // analogWrite(6, 255);
   // if (process.roleSwitch.getOurRole() == 1){
-  if(robot == 0) {
-    motorPower = 0.25;
-    process.defense(motorPower);
-  } else {
-    motorPower = 0.2;
-    process.offense(motorPower);
-  }
+  // if(robot == 0) {
+  //   motorPower = 0.25;
+  //   process.defense(motorPower);
+  // } else {
+  //   motorPower = 0.2;
+  //   process.offense(motorPower);
+  // }
+  process.offense(0.2);
     // while(switches.calibration()) {
     //   motor.initialOrientation = compassSensor.getOrientation();
     //   Serial.println("calibrating");
